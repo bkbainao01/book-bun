@@ -1,5 +1,5 @@
 import { Database } from 'bun:sqlite';
-
+import Bun from 'bun';
 export class User {
   private db: Database;
 
@@ -56,6 +56,22 @@ export class User {
     } catch (error) {
       console.error("❌ getUser error:", error);
       return { status: "error" };
+    }
+  }
+
+  async getUserByEmail(user: any) {
+    try {
+      const query = this.db.query("SELECT * FROM users WHERE email=$email;");
+      console.log("✅ getUserByEmail success");
+      const userData:any = query.get({ $email: user.email });
+      const isMatch = await Bun.password.verify(user.password, userData.password)
+      if(!isMatch) {
+        throw new Error('Email or Password is invalid');
+      }
+      return { status: 'ok' }
+    } catch (error:any) {
+      console.error("❌ getUserByEmail error:", error);
+      return { status: "error", error: error.message };
     }
   }
 

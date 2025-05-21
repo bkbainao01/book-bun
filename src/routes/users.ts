@@ -27,6 +27,38 @@ userRoutes.post(
         last_name: body.last_name,
       });
       if (resp.status === "error") {
+        set.status = 400;
+        throw new Error("form is invalid");
+      }
+      return resp;
+    } catch (error: any) {
+      return { message: "error", error: error.message };
+    }
+  },
+  {
+    body: t.Object({
+      email: t.String(),
+      password: t.String(),
+      first_name: t.String(),
+      last_name: t.String(),
+    }),
+  }
+);
+
+userRoutes.post(
+  "/login",
+  async ({ body, set }: { body: any; set: any }) => {
+    try {
+      // const checkUser = 
+      body.password = await Bun.password.verify(body.password, hash);
+      const resp: any = user.createUser({
+        email: body.email,
+        password: body.password,
+        first_name: body.first_name,
+        last_name: body.last_name,
+      });
+      if (resp.status === "error") {
+        set.status = 400;
         throw new Error("form is invalid");
       }
       return resp;
