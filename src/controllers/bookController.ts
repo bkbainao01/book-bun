@@ -1,5 +1,5 @@
-import { BookService } from "../services/bookService";
-import { User, Book } from "../models/index";
+import { BookService } from "@/services/bookService";
+import { User, Book } from "@/models/index";
 
 export class BookController {
 //   private service = new BookService();

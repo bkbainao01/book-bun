@@ -1,8 +1,19 @@
-import { Elysia, t } from "elysia";
+import { Elysia, status, t } from "elysia";
 import { Book } from "../models/index";
 
 const book = new Book();
-const bookRoutes = new Elysia({ prefix: "/books" });
+const routeDetail:any = {
+    prefix:'/books',
+    detail: {
+        tags: ['Books'],
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    }
+}
+const bookRoutes = new Elysia(routeDetail);
 
 const idValidate = t.Object({ id: t.Number() });
 const bookBodyValidate= t.Object({
@@ -10,18 +21,30 @@ const bookBodyValidate= t.Object({
     author: t.String(),
     price: t.Number(),
 });
-const headersValidate = t.Object({
-    Authorization: t.String()
-})
 
 // GET /books
-bookRoutes.get("/", () => book.getBooks(),{headers: headersValidate});
+bookRoutes.get("/", async () =>{
+    try {
+        await book.getBooks();
+        return {
+            status: "success",
+            message: "Get Book Successfully"
+        }
+    } catch (error:any) {
+        return {
+            status: "error",
+            message: error.message
+        }
+    }
+});
 
 // GET /books/:id
 bookRoutes.get(
     "/:id",
-    ({ params }) => book.getBook(Number(params.id)),
-    { params: idValidate, headers: headersValidate }
+    ({ params }) => {
+        book.getBook(Number(params.id))
+    },
+    { params: idValidate }
 );
 
 // POST /books
@@ -35,7 +58,7 @@ bookRoutes.post(
         }
         return resp;
     },
-    { body: bookBodyValidate, headers: headersValidate }
+    { body: bookBodyValidate }
 );
 
 // PUT /books/:id
@@ -49,7 +72,7 @@ bookRoutes.put(
         }
         return resp;
     },
-    { params: idValidate, body: bookBodyValidate, headers: headersValidate }
+    { params: idValidate, body: bookBodyValidate }
 );
 
 // DELETE /books/:id
@@ -63,7 +86,7 @@ bookRoutes.delete(
         }
         return { message: `Delete ID:${params.id} Successfully` };
     },
-    { params: idValidate, headers: headersValidate }
+    { params: idValidate }
 );
 
 export { bookRoutes };

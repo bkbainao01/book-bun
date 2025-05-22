@@ -1,23 +1,11 @@
-import { Database } from 'bun:sqlite';
-import Bun from 'bun';
+import { prisma } from '@/config/db';
+import Bun, { password } from 'bun';
 export class User {
-  private db: Database;
-
-  constructor() {
-    this.db = new Database("mydb.sqlite");
-  }
 
   authenticate(user: { email: string; password: string }) {
     try {
-      const query = this.db.query(`
-        SELECT * FROM users
-        WHERE email=$email AND password=$password;
-      `);
 
-      const foundUser = query.get({
-        $email: user.email,
-        $password: user.password,
-      });
+      const foundUser = prisma.user.findUnique({ where: { user.email } });
 
       if (!foundUser) {
         throw new Error("User not found");
@@ -64,14 +52,31 @@ export class User {
       const query = this.db.query("SELECT * FROM users WHERE email=$email;");
       console.log("✅ getUserByEmail success");
       const userData:any = query.get({ $email: user.email });
-      const isMatch = await Bun.password.verify(user.password, userData.password)
+      if(!userData) {
+        throw new Error('User not found');
+      }
+      const isMatch : any = await Bun.password.verify(user.password, userData.password);
       if(!isMatch) {
         throw new Error('Email or Password is invalid');
       }
-      return { status: 'ok' }
+      return {
+        data: {
+          email: userData.email,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          isLoggedIn: true
+        },
+        status: 'ok'
+      }
     } catch (error:any) {
-      console.error("❌ getUserByEmail error:", error);
-      return { status: "error", error: error.message };
+      console.error("❌ getUserByEmail error:");
+      return {
+        data: {
+          isLoggedIn: false
+        },
+        status: "error",
+        error: error.message
+      };
     }
   }
 
