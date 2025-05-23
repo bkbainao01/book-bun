@@ -1,7 +1,5 @@
 import { Elysia, status, t } from "elysia";
-import { Book } from "../models/index";
-
-const book = new Book();
+import { BookController } from "@/controllers/bookController";
 const routeDetail:any = {
     prefix:'/books',
     detail: {
@@ -21,71 +19,36 @@ const bookBodyValidate= t.Object({
     author: t.String(),
     price: t.Number(),
 });
+const bookController = new BookController();
 
 // GET /books
-bookRoutes.get("/", async () =>{
-    try {
-        await book.getBooks();
-        return {
-            status: "success",
-            message: "Get Book Successfully"
-        }
-    } catch (error:any) {
-        return {
-            status: "error",
-            message: error.message
-        }
-    }
-});
+bookRoutes.get("/", async () => bookController.getAll());
 
 // GET /books/:id
 bookRoutes.get(
     "/:id",
-    ({ params }) => {
-        book.getBook(Number(params.id))
-    },
+    ({ params }) => bookController.getById(params),
     { params: idValidate }
 );
 
 // POST /books
 bookRoutes.post(
     "/",
-    ({ body, set }) => {
-        const resp = book.createBook(body);
-        if (resp.status === "error") {
-            set.status = 400;
-            return { message: "Insert Incomplete" };
-        }
-        return resp;
-    },
+    ({ body, set }) => bookController.createBook({body , set}),
     { body: bookBodyValidate }
 );
 
 // PUT /books/:id
 bookRoutes.put(
     "/:id",
-    ({ params, body, set }) => {
-        const resp:any = book.updateBook(Number(params.id), body);
-        if (resp.status === "error") {
-            set.status = 400;
-            return { status: "error", message: "Insert Incomplete" };
-        }
-        return resp;
-    },
+    ({ params, body, set }) => bookController.updateBook({ params, body, set }),
     { params: idValidate, body: bookBodyValidate }
 );
 
 // DELETE /books/:id
 bookRoutes.delete(
     "/:id",
-    ({ params, set }) => {
-        const resp = book.deleteBook(Number(params.id));
-        if (resp.status === "error") {
-            set.status = 400;
-            return { message: `Wrong ID or not have ID:${params.id}` };
-        }
-        return { message: `Delete ID:${params.id} Successfully` };
-    },
+    ({ params, set }) => bookController.delete({ params, set }),
     { params: idValidate }
 );
 

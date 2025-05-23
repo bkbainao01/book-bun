@@ -1,19 +1,71 @@
 import { BookService } from "@/services/bookService";
-import { User, Book } from "@/models/index";
+import { status } from "elysia";
+
 
 export class BookController {
-//   private service = new BookService();
+  private bookService = new BookService();
 
-//   getUsers = () => this.service.getAll();
+  async getAll () {
+    try {
+        const books = await this.bookService.getAll();
+        return {
+            data:{
+                books
+            },
+            status: "ok",
+            message:'Get all books success',
+        };
+    } catch (error:any) {
+        console.error("❌ getAll error:", error);
+        return { status: "error" , message: error.message};
+    };
+  }
 
-//   getUserById = ({ params }: any) => {
-//     const user = this.service.findById(Number(params.id));
-//     return user ?? { error: "User not found" };
-//   };
+  async getById ({ params }: any) {
+    try {
+        const book = this.bookService.getById(Number(params.id));
+        return book ?? { error: "User not found" };
+    } catch (error:any) {
+        console.error("❌ getById error:", error);
+        return { status: "error" , message: error.message};
+    }
+  };
 
-//   createUser = ({ body }: any) => {
-//     if (!body.name || !body.email) return { error: "Invalid input" };
-//     const user = User.fromJSON(body);
-//     return this.service.create(user);
-//   };
+  async createBook ({ body }: any) {
+    try {
+        if (!body.name || !body.price || !body.author) {
+            return { error: "Invalid input" };
+        }
+        const book = {
+        name: body.name,
+        author: body.author,
+        price: body.price
+        }
+        return this.bookService.create(book);
+    } catch (error:any) {
+        console.error("❌ createBook error:", error);
+        return { status: "error" , message: error.message };
+    }
+  };
+  async updateBook({ params, body }: any) {
+    try {
+        const book = {
+            name: body.name,
+            author: body.author,
+            price: body.price
+        }
+        return this.bookService.update(Number(params.id), book);
+    } catch (error:any) {
+        console.error("❌ updateBook error:", error);
+        return { status: "error" , message: error.message };
+    }
+  }
+  async delete({ params }: any){
+    try {
+        return this.bookService.delete(Number(params.id));
+    } catch (error:any) {
+        console.error("❌ deleteBook error:", error);
+        return { status: "error" , message: error.message };
+    }
+  }
 }

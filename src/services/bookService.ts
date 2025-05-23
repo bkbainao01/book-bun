@@ -1,21 +1,73 @@
-import { Book } from "../models";
+import { prisma } from '@/config/db';
+import Bun, { password } from 'bun';
 
 export class BookService {
-//   private books: Book[] = [
-//     new Book({ id: 1, name: "Alice", email: "alice@email.com" }),
-//   ];
+  // private db: Database;
 
-//   getAll(): User[] {
-//     return this.users;
-//   }
+  // constructor() {
+  //   this.db = new Database("mydb.sqlite");
+  // }
 
-//   findById(id: number): User | undefined {
-//     return this.users.find(user => user.id === id);
-//   }
+  getAll() {
+    try {
+      return prisma.books.findMany();
+    } catch (error) {
+      console.error('❌ getBooks error:', error);
+      return [];
+    }
+  }
 
-//   create(user: User): User {
-//     user.id = Date.now();
-//     this.users.push(user);
-//     return user;
-//   }
+  getById(id: number) {
+    try {
+      return prisma.books.findUnique({ where: { id } });
+    } catch (error) {
+      console.error('❌ getBook error:', error);
+      return {};
+    }
+  }
+
+  create(book: { name: string; author: string; price: number }) {
+    try {
+      return prisma.books.create({
+        data: {
+          name: book.name,
+          author: book.author,
+          price: book.price
+        }
+      });
+    } catch (error) {
+      console.error("❌ createBook error:", error);
+      return {
+        status: 'error',
+        error
+      };
+    }
+  }
+
+  update(id: number, book: { name: string; author: string; price: number }) {
+    try {
+      return prisma.books.update({
+        where: { id },
+        data:{
+        name: book.name,
+        author: book.author,
+        price: book.price
+      }
+      });
+    } catch (error) {
+      console.error("❌ updateBook error:", error);
+      return null;
+    }
+  }
+
+  delete(id: number) {
+    try {
+      return prisma.books.delete({
+        where: { id }
+      });
+    } catch (error) {
+      console.error("❌ deleteBook error:", error);
+      return { status: 'error', error };
+    }
+  }
 }

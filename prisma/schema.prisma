@@ -13,18 +13,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int    @id @default(autoincrement())
+model Users {
+  id    String   @id @default(uuid()) // UUID แบบ String
   email String @unique
+  password String
   firstname  String
   lastname String
   createdAt DateTime @default(now())
+
+  sessions UserSessions[]
 }
 
-model Book {
-  id Int @id @default(autoincrement())
+model Books {
+  id String   @id @default(uuid()) // UUID แบบ String
   name String @unique
   author String
   price Int
   createdAt DateTime @default(now())
 }
+
+model UserSessions {
+  id          String   @id @default(uuid())
+  userId      String
+  deviceInfo  String?
+  ipAddress   String?
+  userAgent   String?
+  token       String   @unique
+  createdAt   DateTime @default(now())
+  lastUsedAt  DateTime @updatedAt
+  isActive    Boolean  @default(true)
+
+  user        Users     @relation(fields: [userId], references: [id])
+}
+
+

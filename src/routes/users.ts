@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { User } from "../models/index";
+import { UserController } from "@/controllers/userController";
 
 
 const routeDetail:any = {
@@ -14,41 +14,17 @@ const routeDetail:any = {
     }
 }
 
-const user = new User();
 const userRoutes = new Elysia(routeDetail)
+const userController = new UserController();
 
+userRoutes.get("/", async({set}) =>userController.getAll());
 
-userRoutes.get("/", async({set}) => {
-    return user.getUsers();
-});
-
-userRoutes.get("/:id", ({ params }: { params: any }) => {
-  const resp: any = user.getUser(params.id);
-  return resp;
-});
+userRoutes.get("/:id", ({ params }: { params: any }) =>userController.getById(params),
+{params: t.Object({ id: t.Number() })});
 
 userRoutes.put(
   "/:id",
-  async ({ params, body, set }: { params: any; body: any; set: any }) => {
-    try {
-      body.password = await Bun.password.hash(body.password, {
-        algorithm: "bcrypt",
-        cost: 4, //number between 4-31
-      });
-      const resp: any = user.updateUser(parseInt(params.id), {
-        email: body.email,
-        password: body.password,
-        first_name: body.first_name,
-        last_name: body.last_name,
-      });
-      if (resp.status === "error") {
-        throw new Error("form is invalid");
-      }
-      return resp;
-    } catch (error: any) {
-      return { message: "error", error: error.message };
-    }
-  },
+  async ({ params, body, set }) => userController.updateUser({ params, body, set }),
   {
     body: t.Object({
       email: t.String(),

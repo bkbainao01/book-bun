@@ -4,7 +4,7 @@ import { swagger } from "@elysiajs/swagger";
 import { swaggerSetting } from "./utils/swaggerSetting"
 import jwt from "@elysiajs/jwt";
 import { bearer } from "@elysiajs/bearer";
-import { validateBearerToken } from "./utils/helper";
+import { verifyToken } from "./middlewares/authMiddlewares";
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
@@ -16,16 +16,12 @@ app
   .use(
     jwt({
       name: "jwt",
-      secret:
-        process.env.JWT_SECRET_KEY ??
-        (() => {
-          throw new Error("JWT_SECRET_KEY environment variable is not set");
-        })(),
+      secret:'kunikuzushi',
       exp: "7d",
     })
   )
   .use(bearer())
-  .derive(async ({ bearer, jwt, request, set }) => validateBearerToken({request, bearer, jwt, set}))
+  .derive(async ({ bearer, jwt, request, set }) => verifyToken({bearer, jwt, request, set}))
   .use(api)
   .get("/", () => "Welcome to Book-Bun-API", { detail: { tags: ["Default"] } })
   .use(swagger(swaggerSetting))
