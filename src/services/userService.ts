@@ -2,7 +2,7 @@ import { prisma } from "@/config/db";
 import bcrypt from "bcrypt";
 import Bun from "bun";
 export class UserService {
-  authenticate = async(jwt:any, user: { email: string; password: string },set:any) => {
+  authenticate = async(user: { email: string; password: string },set:any) => {
     try {
       const foundUser:any = await prisma.users.findUnique({
         where: { email: user.email },
@@ -17,21 +17,10 @@ export class UserService {
         set.status = 400;
         throw new Error("Invalid email or password");
       }
-      // สร้าง JWT token
-      const token = await jwt.sign(
-        {
-          userId: foundUser.id,
-          email: foundUser.email,
-        },
-      );
       return {
-        data:{
           user: foundUser,
-          isLoggedIn: true,
-          token: token,
-        },
-        status: "ok",
-        message:'Login success',
+          token: null,
+          isLoggedIn: true
       };
     } catch (error) {
       console.error("❌ Login fail:", error);

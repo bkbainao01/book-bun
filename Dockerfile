@@ -1,0 +1,17 @@
+FROM oven/bun:latest
+
+WORKDIR /app
+RUN apt-get update -y && apt-get install -y openssl
+
+COPY ./prisma ./prisma
+COPY ./src ./src
+COPY ./bun.lock ./bun.lock
+COPY ./package.json ./package.json
+COPY ./tsconfig.json ./tsconfig.json
+
+RUN bun install
+RUN bun prisma generate
+
+EXPOSE 3000
+
+CMD ["bun", "src/index.ts"]

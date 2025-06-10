@@ -5,7 +5,6 @@ import { seedUsers } from './seeds/users.seed.ts';
 
 async function main() {
   console.log('🌱 Seeding started...');
-  
 //   await seedRoles();
   await seedUsers();
 //   await seedSettings();

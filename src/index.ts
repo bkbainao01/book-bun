@@ -4,11 +4,12 @@ import { swagger } from "@elysiajs/swagger";
 import { swaggerSetting } from "./utils/swaggerSetting"
 import jwt from "@elysiajs/jwt";
 import { bearer } from "@elysiajs/bearer";
-import { verifyToken } from "./middlewares/authMiddlewares";
+import { authPlugin } from "./plugins/authPlugin";
 import { PrismaClient } from '@prisma/client'
+import { UserSessionService } from './services/userSessionService'; // service จริงของคุณ
 
 const prisma = new PrismaClient()
-
+const sessionService = new UserSessionService();
 const app = new Elysia();
 
 app
@@ -21,11 +22,10 @@ app
     })
   )
   .use(bearer())
-  .derive(async ({ bearer, jwt, request, set }) => verifyToken({bearer, jwt, request, set}))
+  .decorate('userSessionService', sessionService) // inject service
+  .derive(async ({ bearer, jwt, request, set }) => authPlugin({ bearer, jwt, request, set }))
   .use(api)
   .get("/", () => "Welcome to Book-Bun-API", { detail: { tags: ["Default"] } })
   .use(swagger(swaggerSetting))
   .listen(3000);
-console.log(
-  `🦊 Elysia is running at http:${app.server?.hostname}:${app.server?.port}`
-);
+

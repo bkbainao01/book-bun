@@ -2,12 +2,13 @@
   "name": "book-bun",
   "version": "1.0.50",
   "prisma": {
-    "seed": "ts-node --esm prisma/seed.ts"
+    "seed": "bun prisma/seed.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
-    "seed": "prisma db seed"
+    "seed": "prisma db seed",
+    "prisma": "prisma generate"
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.3.0",
