@@ -49,7 +49,7 @@ export class UserSessionService {
   create = async (user:any) => {
     try {
       const { deviceInfo, ipAddress, userAgent, token , userId } = user;
-      const expiresAt:string = moment().add(7, 'days').toISOString();
+      const expiredAt:string = moment().add(7, 'days').toISOString();
       return prisma.userSessions.create({
             data: {
               userId,
@@ -57,7 +57,7 @@ export class UserSessionService {
               ipAddress,
               userAgent,
               token,
-              expiresAt: expiresAt // กำหนดวันหมดอายุ session
+              expiredAt: expiredAt // กำหนดวันหมดอายุ session
             }
           });
     } catch (error) {

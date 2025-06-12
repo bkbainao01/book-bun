@@ -11,7 +11,7 @@ import { UserSessionService } from './services/userSessionService'; // service à
 const prisma = new PrismaClient()
 const sessionService = new UserSessionService();
 const app = new Elysia();
-
+const appPort: string = process.env.APP_PORT ?? "3000";
 app
   .derive(() => ({db: prisma}))
   .use(
@@ -27,5 +27,7 @@ app
   .use(api)
   .get("/", () => "Welcome to Book-Bun-API", { detail: { tags: ["Default"] } })
   .use(swagger(swaggerSetting))
-  .listen(3000);
+  .listen(appPort);
+
+  console.log(`running at http://localhost:${appPort}`)
 

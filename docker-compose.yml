@@ -1,34 +1,35 @@
 services:
-  db:
-    image: mysql:latest
-    container_name: bookbun-mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: bookbun
-      MYSQL_USER: bunuser
-      MYSQL_PASSWORD: bunpass
-    ports:
-      - "3306:3306"
-    volumes:
-      - bookbun-mysql-data:/var/lib/mysql
+  # db:
+  #   image: mysql:latest
+  #   container_name: bookbun-mysql
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: bookbun
+  #     MYSQL_USER: bunuser
+  #     MYSQL_PASSWORD: bunpass
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - bookbun-mysql-data:/var/lib/mysql
 
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: bookbun-api
     restart: always
     ports:
-      - "3000:3000"
-    depends_on:
-      - db
+      - "8080:8080"
+    # depends_on:
+    #   - db
     volumes:
       - .:/app
     environment:
-      - DATABASE_URL=mysql://root:root@db:3306/bookbun
+      - DATABASE_URL=file:./prisma/dev.db
       - NODE_ENV=production
+      - APP_PORT=8080
     command: sh -c "bunx prisma migrate dev --name init && bun run prisma/seed.ts && bun src/index.ts"
 
-volumes:
-  bookbun-mysql-data:
+# volumes:
+#   bookbun-mysql-data:
