@@ -28,6 +28,7 @@ export class UserController {
     };
     return this.userService.create(user);
   };
+
   updateUser = ({ params, body }: any) => {
     const user = {
       firstname: body.firstname,
@@ -90,9 +91,8 @@ export class UserController {
       return { status: "error", message: error.message };
     }
   };
-  logout = async ({ jwt, body }: any) => {
+  logout = async ({ jwt, body, set }: any) => {
     try {
-      const decoded = await jwt.verify(body.token); // หรือใช้จาก header
       const session = await this.userSessionService.findByToken(body.token);
       if (!session || !session.isActive) {
         return {

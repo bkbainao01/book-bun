@@ -9,9 +9,7 @@ export class BookController {
     try {
         const books = await this.bookService.getAll();
         return {
-            data:{
-                books
-            },
+            data: books,
             status: "ok",
             message:'Get all books success',
         };
