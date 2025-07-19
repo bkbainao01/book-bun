@@ -37,12 +37,7 @@ PORT=3000
 ## 4. สร้าง table and run seed
 
 ```powershell
-npm run prisma:merge-schema
-```
-
-
-```powershell
-npx prisma migrate dev --name init
+npx prisma generate
 ```
 
 ---
