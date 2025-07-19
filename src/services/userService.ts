@@ -57,6 +57,13 @@ export class UserService {
         where: {
           id: id,
         },
+        include: {
+          roles: {
+            include: {
+              role: true,
+            },
+          },
+        },
       });
     } catch (error) {
       console.error("❌ getUser error:", error);

@@ -20,8 +20,8 @@ userRoutes.get("/", async ({ set }) => userController.getAll());
 
 userRoutes.get(
   "/:id",
-  ({ params }: { params: any }) => userController.getById(params),
-  { params: validate.Object({ id: validate.Number() }) }
+  ({ params }: { params: any }) => userController.getById({params}),
+  { params: validate.Object({ id: validate.String() }) }
 );
 
 userRoutes.put(
