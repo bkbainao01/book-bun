@@ -18,13 +18,16 @@ const authRoutes = new Elysia(routeDetail);
 // POST /register
 authRoutes.post(
   "/register",
-  async ({ body, set }) => userController.createUser(body),
+  async ({ body, set }) => {
+    console.log("🚀 ~ body:", body)
+    return userController.createUser({body})
+  },
   {
     body: t.Object({
       email: t.String(),
       password: t.String(),
-      first_name: t.String(),
-      last_name: t.String(),
+      firstname: t.String(),
+      lastname: t.String(),
     }),
   }
 );

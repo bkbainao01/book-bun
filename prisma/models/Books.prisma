@@ -1,0 +1,8 @@
+model Books {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  author    String
+  price     Int
+  createdAt DateTime @default(now())
+  status    Boolean  @default(true)
+}

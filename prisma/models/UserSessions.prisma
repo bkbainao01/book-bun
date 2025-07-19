@@ -1,0 +1,14 @@
+model UserSessions {
+  id         String   @id @default(uuid())
+  userId     String
+  deviceInfo String?
+  ipAddress  String?
+  userAgent  String?
+  token      String   @unique
+  createdAt  DateTime @default(now())
+  lastUsedAt DateTime @updatedAt
+  expiredAt  DateTime
+  isActive   Boolean  @default(true)
+  status     Boolean  @default(true)
+  user       Users    @relation(fields: [userId], references: [id])
+}

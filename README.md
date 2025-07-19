@@ -45,7 +45,7 @@ bun prisma generate
 ถ้าเพิ่ม model หรือแก้ schema
 
 ```powershell
-bun prisma migrate dev --name init
+npx prisma migrate dev --name init
 ```
 
 หรือถ้าต้องการดัน schema เข้า DB โดยไม่ใช้ migration

@@ -40,7 +40,7 @@ export class UserService {
     }
   };
 
-  getById(id: number) {
+  getById(id: string) {
     try {
       return prisma.users.findUnique({
         where: {
@@ -97,7 +97,7 @@ export class UserService {
     }
   };
 
-  update(id: number, user: any) {
+  update(id: string, user: any) {
     try {
       return prisma.users.update({
         where: { id: id },
@@ -114,7 +114,7 @@ export class UserService {
     }
   }
 
-  delete(id: number) {
+  delete(id: string) {
     try {
       return prisma.users.delete({
         where: { id },

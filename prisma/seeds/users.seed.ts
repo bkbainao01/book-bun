@@ -10,30 +10,35 @@ export const seedUsers = async () => {
       password: hashPassword,
       firstname: "Admin",
       lastname: "Bookbun",
+      status: true
     },
     {
       email: "user1@bookbun.com",
       password: hashPassword,
       firstname: "User1",
       lastname: "Bookbun",
+      status: true
     },
     {
       email: "user2@bookbun.com",
       password: hashPassword,
       firstname: "User2",
       lastname: "Bookbun",
+      status: true
     },
     {
       email: "user3@bookbun.com",
       password: hashPassword,
       firstname: "User3",
       lastname: "Bookbun",
+      status: true
     },
     {
       email: "user4@bookbun.com",
       password: hashPassword,
       firstname: "User4",
       lastname: "Bookbun",
+      status: true
     },
   ];
   // ใช้ upsert (insert ถ้าไม่เจอ, update ถ้าเจอ)
