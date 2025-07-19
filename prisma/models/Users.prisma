@@ -1,10 +1,33 @@
 model Users {
-  id        String         @id @default(uuid())
-  email     String         @unique
-  password  String
-  firstname String
-  lastname  String
-  createdAt DateTime       @default(now())
-  status    Boolean        @default(true)
-  sessions  UserSessions[]
+  id                 String         @id @default(uuid())
+  email              String         @unique
+  password           String?
+  firstname          String?
+  lastname           String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime?
+  status             Boolean        @default(true)
+  sessions           UserSessions[]
+  // Self-relations
+  createdById        String?
+  createdBy          Users?         @relation("UsersCreatedBy", fields: [createdById], references: [id])
+  createdUsers       Users[]        @relation("UsersCreatedBy")
+  updatedById        String?
+  updatedBy          Users?         @relation("UsersUpdatedBy", fields: [updatedById], references: [id])
+  updatedUsers       Users[]        @relation("UsersUpdatedBy")
+  // Reverse relations from other models
+  attachmentsCreated Attachments[]  @relation("AttachmentsCreatedBy")
+  attachmentsUpdated Attachments[]  @relation("AttachmentsUpdatedBy")
+  booksCreated       Books[]        @relation("BooksCreatedBy")
+  booksUpdated       Books[]        @relation("BooksUpdatedBy")
+  cartsCreated       Carts[]        @relation("CartsCreatedBy")
+  cartsUpdated       Carts[]        @relation("CartsUpdatedBy")
+  categoriesCreated  Category[]     @relation("CategoryCreatedBy")
+  categoriesUpdated  Category[]     @relation("CategoryUpdatedBy")
+  rolesCreated       Roles[]        @relation("RolesCreatedBy")
+  rolesUpdated       Roles[]        @relation("RolesUpdatedBy")
+  stockCreated       Stock[]        @relation("StockCreatedBy")
+  stockUpdated       Stock[]        @relation("StockUpdatedBy")
+  userRolesCreated   UserRoles[]    @relation("UserRolesCreatedBy")
+  userRolesUpdated   UserRoles[]    @relation("UserRolesUpdatedBy")
 }

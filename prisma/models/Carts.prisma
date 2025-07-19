@@ -1,0 +1,17 @@
+model Carts {
+  id          String   @id @default(uuid())
+  userId      String?
+  bookId      String?
+  orderPrice  Float?
+  status      Int?
+  orderType   Int?
+  rentAt      DateTime?
+  rentTo      DateTime?
+  buyAt       DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime?
+  createdById String?
+  createdBy   Users?   @relation("CartsCreatedBy", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   Users?   @relation("CartsUpdatedBy", fields: [updatedById], references: [id])
+}

@@ -1,0 +1,16 @@
+model Stock {
+  id          String   @id @default(uuid())
+  bookId      String?
+  book        Books?    @relation("StockBook", fields: [bookId], references: [id])
+  inventory   Int?
+  unitPrice   Float?
+  totalPrice  Float?
+  remark      String?
+  status      Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime?
+  createdById String?
+  createdBy   Users?   @relation("StockCreatedBy", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   Users?   @relation("StockUpdatedBy", fields: [updatedById], references: [id])
+}
