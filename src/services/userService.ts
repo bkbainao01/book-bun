@@ -9,6 +9,13 @@ export class UserService {
     try {
       const foundUser: any = await prisma.users.findUnique({
         where: { email: user.email },
+        include: {
+          roles: {
+            include: {
+              role: true,
+            },
+          },
+        },
       });
       if (!foundUser) {
         set.status = 401;
