@@ -44,5 +44,6 @@ prisma/dev.sqlite
 prisma/dev.db-journal
 prisma/migrations/
 prisma/generated/
+prisma/base.prisma
 *.sqlite
 *.db
