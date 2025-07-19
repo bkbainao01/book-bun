@@ -31,20 +31,25 @@ export class BookController {
 
   async createBook ({ body }: any) {
     try {
-        if (!body.name || !body.price || !body.author) {
-            return { error: "Invalid input" };
-        }
         const book = {
-        name: body.name,
-        author: body.author,
-        price: body.price
-        }
+            nameTh: body.nameTh,
+            nameEn: body.nameEn,
+            author: body.author,
+            publisher: body.publisher,
+            attachment: body.attachment,
+            rating: body.rating,
+            price: body.price,
+            discount: body.discount,
+            description: body.description,
+            summary: body.summary
+        };
         return this.bookService.create(book);
     } catch (error:any) {
         console.error("❌ createBook error:", error);
         return { status: "error" , message: error.message };
     }
   };
+
   async updateBook({ params, body }: any) {
     try {
         const book = {
@@ -58,6 +63,7 @@ export class BookController {
         return { status: "error" , message: error.message };
     }
   }
+
   async delete({ params }: any){
     try {
         return this.bookService.delete(Number(params.id));

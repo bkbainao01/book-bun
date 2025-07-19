@@ -15,9 +15,16 @@ const bookRoutes = new Elysia(routeDetail);
 
 const idValidate = t.Object({ id: t.Number() });
 const bookBodyValidate= t.Object({
-    name: t.String(),
+    nameTh: t.String(),
+    nameEn: t.String(),
     author: t.String(),
+    publisher: t.String(),
+    attachment: t.String(),
+    rating: t.Number(),
     price: t.Number(),
+    discount: t.Number(),
+    description: t.String(),
+    summary: t.String()
 });
 const bookController = new BookController();
 

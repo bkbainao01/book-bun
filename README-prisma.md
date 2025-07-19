@@ -40,6 +40,9 @@ npx prisma db seed
 # สร้าง migration ใหม่พร้อม apply
 npx prisma migrate dev --name add-user-isAdmin
 
+# สร้างไฟล์ model
+npm run prisma:make Example
+
 # รีเซ็ตฐานข้อมูลและ apply migration ใหม่ทั้งหมด (ข้อมูลจะหาย)
 npx prisma migrate reset
 

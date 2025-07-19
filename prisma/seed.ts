@@ -1,14 +1,12 @@
 import { seedBooks } from './seeds/books.seed.ts';
 import { seedUsers } from './seeds/users.seed.ts';
-// import { seedRoles } from './seeds/role.seed';
-// import { seedSettings } from './seeds/setting.seed';
+import { seedRoles } from './seeds/role.seed';
 
 async function main() {
   console.log('🌱 Seeding started...');
-//   await seedRoles();
-  await seedUsers();
-//   await seedSettings();
   await seedBooks();
+  await seedRoles();
+  await seedUsers();
   console.log('✅ Seeding completed');
 }
 

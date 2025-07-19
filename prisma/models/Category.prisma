@@ -1,0 +1,11 @@
+model Category {
+  id          String    @id @default(uuid())
+  name        String?
+  status      Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  createdById String?
+  createdBy   Users?    @relation("CategoryCreatedBy", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   Users?    @relation("CategoryUpdatedBy", fields: [updatedById], references: [id])
+}

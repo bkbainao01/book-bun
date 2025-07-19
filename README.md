@@ -8,29 +8,20 @@
 ## 1. เตรียมเครื่องมือพื้นฐาน
 
 - ติดตั้ง [Bun](https://bun.sh/)
-- ติดตั้ง [Node.js](https://nodejs.org/) (ถ้าจำเป็น)
-- ติดตั้งฐานข้อมูลที่ใช้งาน เช่น MySQL, PostgreSQL หรือ SQLite
-
----
-
-## 2. Clone โปรเจกต์
-
-```bash
-git clone <your-repo-url>
-cd <your-project-folder>
+```powershell
+powershell -c "irm bun.sh/install.ps1 | iex"
 ```
 
----
+- ติดตั้ง [Node.js](https://nodejs.org/)
 
-## 3. ติดตั้ง dependencies ด้วย Bun
 
-```bash
+## 2. ติดตั้ง dependencies ด้วย Bun
+
+```powershell
 bun install
 ```
 
----
-
-## 4. ตั้งค่าไฟล์ `.env`
+## 3. ตั้งค่าไฟล์ `.env`
 
 สร้างไฟล์ `.env` ใน root project เพื่อเก็บตัวแปร environment สำคัญ
 
@@ -43,53 +34,23 @@ PORT=3000
 
 ---
 
-## 5. สร้าง Prisma Client และ Migration
+## 4. สร้าง table and run seed
 
-ถ้าคุณยังไม่มี schema หรืออยากอัพเดต schema ให้ทำตามนี้
-
-```bash
-bun prisma generate
-```
-
-ถ้าเพิ่ม model หรือแก้ schema
-
-```bash
-bun prisma migrate dev --name init
-```
-
-หรือถ้าต้องการดัน schema เข้า DB โดยไม่ใช้ migration
-
-```bash
-bun prisma db push
+```powershell
+npx prisma generate
 ```
 
 ---
 
-## 6. รัน Seed ข้อมูล (ถ้ามี)
+## 6. รันเซิร์ฟเวอร์ด้วย Bun
 
-ถ้าคุณมีไฟล์ seed ให้รัน
-
-```bash
-bun prisma db seed
-```
-
----
-
-## 7. รันเซิร์ฟเวอร์ด้วย Bun
-
-```bash
-bun run start
-```
-
-หรือถ้าคุณตั้งค่าใน `package.json` ไว้
-
-```bash
+```powershell
 bun run dev
 ```
 
 ---
 
-## 8. ทดสอบ API
+## 7. ทดสอบ API
 
 เปิด browser หรือใช้ Postman, curl ทดสอบ API
 

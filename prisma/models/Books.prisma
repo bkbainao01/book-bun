@@ -1,0 +1,26 @@
+model Books {
+  id           String       @id @default(uuid())
+  nameTh       String?      @unique
+  nameEn       String?      @unique
+  author       String?
+  publisher    String?
+  publishAt    DateTime?
+  pages        Int?
+  isbn         String?
+  attachmentId String?
+  attachment   Attachments? @relation("BooksAttachment", fields: [attachmentId], references: [id])
+  rating       Int?
+  price        Int?
+  discount     Int?
+  description  String?
+  summary      String?
+  status       Boolean?     @default(true)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime?
+  createdById  String?
+  createdBy    Users?       @relation("BooksCreatedBy", fields: [createdById], references: [id])
+  updatedById  String?
+  updatedBy    Users?       @relation("BooksUpdatedBy", fields: [updatedById], references: [id])
+
+  stocks Stock[] @relation("StockBook")
+}

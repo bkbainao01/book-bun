@@ -15,16 +15,17 @@ export class UserController {
   }
 
   getById = ({ params }: any) => {
-    const user = this.userService.getById(Number(params.id));
+    const user = this.userService.getById((params.id));
     return user ?? { error: "User not found" };
   };
 
   createUser = ({ body }: any) => {
     const user = {
-      firstname: body.name,
+      firstname: body.firstname,
       lastname: body.lastname,
       email: body.email,
       password: body.password,
+      roleIds: body.roleIds
     };
     return this.userService.create(user);
   };
@@ -35,12 +36,15 @@ export class UserController {
       lastname: body.lastname,
       email: body.email,
       password: body.password,
+      roleIds: body.roleIds
     };
-    return this.userService.update(Number(params.id), user);
+    return this.userService.update((params.id), user);
   };
+
   deleteUser = ({ params }: any) => {
-    return this.userService.delete(Number(params.id));
+    return this.userService.delete((params.id));
   };
+
   login = async ({ jwt, body, set }: any) => {
     try {
       const MAX_SESSIONS = 3; // กำหนดจำนวน session สูงสุดที่อนุญาต
@@ -91,6 +95,7 @@ export class UserController {
       return { status: "error", message: error.message };
     }
   };
+
   logout = async ({ jwt, body, set }: any) => {
     try {
       const session = await this.userSessionService.findByToken(body.token);
