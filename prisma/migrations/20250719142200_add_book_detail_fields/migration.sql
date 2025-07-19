@@ -1,4 +1,0 @@
--- AlterTable
-ALTER TABLE "Books" ADD COLUMN "isbn" TEXT;
-ALTER TABLE "Books" ADD COLUMN "pages" INTEGER;
-ALTER TABLE "Books" ADD COLUMN "publishAt" DATETIME;

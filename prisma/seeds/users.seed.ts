@@ -1,44 +1,162 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 export const seedUsers = async () => {
   const hashPassword = await bcrypt.hash("1234", 10);
+
+  const getRole = async (nameRole: string) => {
+    const role: any = await prisma.roles.findFirst({
+      where: {
+        name: nameRole,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return role.id;
+  };
+
   const users = [
     {
       email: "admin@bookbun.com",
       password: hashPassword,
-      firstname: "Admin",
-      lastname: "Bookbun",
-      status: true
+      firstname: "John",
+      lastname: "Anderson",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Admin") } } }],
+      },
     },
     {
-      email: "user1@bookbun.com",
+      email: "somying.happy@bookbun.com",
       password: hashPassword,
-      firstname: "User1",
-      lastname: "Bookbun",
-      status: true
+      firstname: "Sarah",
+      lastname: "Wilson",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Admin") } } }],
+      },
     },
     {
-      email: "user2@bookbun.com",
+      email: "owner.store@bookbun.com",
       password: hashPassword,
-      firstname: "User2",
-      lastname: "Bookbun",
-      status: true
+      firstname: "Michael",
+      lastname: "Thompson",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Store Owner") } } }],
+      },
     },
     {
-      email: "user3@bookbun.com",
+      email: "sales.team@bookbun.com",
       password: hashPassword,
-      firstname: "User3",
-      lastname: "Bookbun",
-      status: true
+      firstname: "Emily",
+      lastname: "Johnson",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Sales Staff") } } }],
+      },
     },
     {
-      email: "user4@bookbun.com",
+      email: "stock.manager@bookbun.com",
       password: hashPassword,
-      firstname: "User4",
-      lastname: "Bookbun",
-      status: true
+      firstname: "David",
+      lastname: "Brown",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Stock Manager") } } }],
+      },
+    },
+    {
+      email: "content.writer@bookbun.com",
+      password: hashPassword,
+      firstname: "Jessica",
+      lastname: "Miller",
+      roles: {
+        create: [
+          { role: { connect: { id: await getRole("Content Manager") } } },
+        ],
+      },
+    },
+    {
+      email: "moderator.team@bookbun.com",
+      password: hashPassword,
+      firstname: "Robert",
+      lastname: "Davis",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Moderator") } } }],
+      },
+    },
+    {
+      email: "marketing.pro@bookbun.com",
+      password: hashPassword,
+      firstname: "Amanda",
+      lastname: "Garcia",
+      roles: {
+        create: [
+          { role: { connect: { id: await getRole("Marketing Specialist") } } },
+        ],
+      },
+    },
+    {
+      email: "support.help@bookbun.com",
+      password: hashPassword,
+      firstname: "Kevin",
+      lastname: "Martinez",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Support Staff") } } }],
+      },
+    },
+    {
+      email: "data.analyst@bookbun.com",
+      password: hashPassword,
+      firstname: "Lisa",
+      lastname: "Rodriguez",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Data Analyst") } } }],
+      },
+    },
+    {
+      email: "customer1@bookbun.com",
+      password: hashPassword,
+      firstname: "Christopher",
+      lastname: "Lee",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Customer") } } }],
+      },
+    },
+    {
+      email: "customer2@bookbun.com",
+      password: hashPassword,
+      firstname: "Michelle",
+      lastname: "White",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Customer") } } }],
+      },
+    },
+    {
+      email: "customer3@bookbun.com",
+      password: hashPassword,
+      firstname: "Daniel",
+      lastname: "Taylor",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Customer") } } }],
+      },
+    },
+    {
+      email: "customer4@bookbun.com",
+      password: hashPassword,
+      firstname: "Nicole",
+      lastname: "Clark",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Customer") } } }],
+      },
+    },
+    {
+      email: "customer5@bookbun.com",
+      password: hashPassword,
+      firstname: "Ryan",
+      lastname: "Lewis",
+      roles: {
+        create: [{ role: { connect: { id: await getRole("Customer") } } }],
+      },
     },
   ];
   // ใช้ upsert (insert ถ้าไม่เจอ, update ถ้าเจอ)
@@ -50,7 +168,7 @@ export const seedUsers = async () => {
   //   create: user,
   // });
   // }
-//  ปัญหา: Promise.all() ไม่รับประกันลำดับการทำงาน
+  //  ปัญหา: Promise.all() ไม่รับประกันลำดับการทำงาน
   await Promise.all(
     users.map((user) =>
       prisma.users.upsert({
