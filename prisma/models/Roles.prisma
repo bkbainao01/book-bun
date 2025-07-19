@@ -1,12 +1,13 @@
 model Roles {
-  id          String    @id @default(uuid())
-  name        String?   @unique
+  id          String      @id @default(uuid())
+  name        String?     @unique
   description String?
-  status      Boolean   @default(true)
-  createdAt   DateTime  @default(now())
+  status      Boolean     @default(true)
+  createdAt   DateTime    @default(now())
   updatedAt   DateTime?
   createdById String?
-  createdBy   Users?    @relation("RolesCreatedBy", fields: [createdById], references: [id])
+  createdBy   Users?      @relation("RolesCreatedBy", fields: [createdById], references: [id])
   updatedById String?
-  updatedBy   Users?    @relation("RolesUpdatedBy", fields: [updatedById], references: [id])
+  updatedBy   Users?      @relation("RolesUpdatedBy", fields: [updatedById], references: [id])
+  UserRoles   UserRoles[]
 }

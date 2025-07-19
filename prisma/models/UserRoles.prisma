@@ -1,10 +1,14 @@
 model UserRoles {
-  id          String   @id @default(uuid())
-  status      Boolean  @default(true)
-  createdAt   DateTime @default(now())
+  user        Users?    @relation(fields: [userId], references: [id])
+  userId      String
+  role        Roles?    @relation(fields: [roleId], references: [id])
+  roleId      String
+  createdAt   DateTime? @default(now())
   updatedAt   DateTime?
   createdById String?
-  createdBy   Users?   @relation("UserRolesCreatedBy", fields: [createdById], references: [id])
+  createdBy   Users?    @relation("UserRolesCreatedBy", fields: [createdById], references: [id])
   updatedById String?
-  updatedBy   Users?   @relation("UserRolesUpdatedBy", fields: [updatedById], references: [id])
+  updatedBy   Users?    @relation("UserRolesUpdatedBy", fields: [updatedById], references: [id])
+
+  @@id([userId, roleId]) // Composite Primary Key
 }

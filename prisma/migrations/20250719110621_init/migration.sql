@@ -102,12 +102,16 @@ CREATE TABLE "Stock" (
 
 -- CreateTable
 CREATE TABLE "UserRoles" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "status" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT NOT NULL,
+    "roleId" TEXT NOT NULL,
+    "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME,
     "createdById" TEXT,
     "updatedById" TEXT,
+
+    PRIMARY KEY ("userId", "roleId"),
+    CONSTRAINT "UserRoles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "UserRoles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "UserRoles_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Users" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "UserRoles_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "Users" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );

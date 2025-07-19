@@ -9,17 +9,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model Attachments {
-    id          String   @id @default(uuid())
+    id          String    @id @default(uuid())
     name        String?
     path        String?
     type        String?
     status      Int?
-    createdAt   DateTime @default(now())
+    createdAt   DateTime  @default(now())
     updatedAt   DateTime?
     createdById String?
-    createdBy   Users?   @relation("AttachmentsCreatedBy", fields: [createdById], references: [id])
+    createdBy   Users?    @relation("AttachmentsCreatedBy", fields: [createdById], references: [id])
     updatedById String?
-    updatedBy   Users?   @relation("AttachmentsUpdatedBy", fields: [updatedById], references: [id])
+    updatedBy   Users?    @relation("AttachmentsUpdatedBy", fields: [updatedById], references: [id])
 
     books Books[] @relation("BooksAttachment")
 }
@@ -47,7 +47,7 @@ model Books {
   stocks Stock[] @relation("StockBook")
 }
 model Carts {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   userId      String?
   bookId      String?
   orderPrice  Float?
@@ -56,38 +56,39 @@ model Carts {
   rentAt      DateTime?
   rentTo      DateTime?
   buyAt       DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime?
-  createdById String?
-  createdBy   Users?   @relation("CartsCreatedBy", fields: [createdById], references: [id])
-  updatedById String?
-  updatedBy   Users?   @relation("CartsUpdatedBy", fields: [updatedById], references: [id])
-}
-model Category {
-  id          String   @id @default(uuid())
-  name        String?
-  status      Int?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime?
-  createdById String?
-  createdBy   Users?   @relation("CategoryCreatedBy", fields: [createdById], references: [id])
-  updatedById String?
-  updatedBy   Users?   @relation("CategoryUpdatedBy", fields: [updatedById], references: [id])
-}
-model Roles {
-  id          String    @id @default(uuid())
-  name        String?   @unique
-  description String?
-  status      Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime?
   createdById String?
-  createdBy   Users?    @relation("RolesCreatedBy", fields: [createdById], references: [id])
+  createdBy   Users?    @relation("CartsCreatedBy", fields: [createdById], references: [id])
   updatedById String?
-  updatedBy   Users?    @relation("RolesUpdatedBy", fields: [updatedById], references: [id])
+  updatedBy   Users?    @relation("CartsUpdatedBy", fields: [updatedById], references: [id])
+}
+model Category {
+  id          String    @id @default(uuid())
+  name        String?
+  status      Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  createdById String?
+  createdBy   Users?    @relation("CategoryCreatedBy", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   Users?    @relation("CategoryUpdatedBy", fields: [updatedById], references: [id])
+}
+model Roles {
+  id          String      @id @default(uuid())
+  name        String?     @unique
+  description String?
+  status      Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?
+  createdById String?
+  createdBy   Users?      @relation("RolesCreatedBy", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   Users?      @relation("RolesUpdatedBy", fields: [updatedById], references: [id])
+  UserRoles   UserRoles[]
 }
 model Stock {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   bookId      String?
   book        Books?    @relation("StockBook", fields: [bookId], references: [id])
   inventory   Int?
@@ -95,22 +96,26 @@ model Stock {
   totalPrice  Float?
   remark      String?
   status      Int?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
   updatedAt   DateTime?
   createdById String?
-  createdBy   Users?   @relation("StockCreatedBy", fields: [createdById], references: [id])
+  createdBy   Users?    @relation("StockCreatedBy", fields: [createdById], references: [id])
   updatedById String?
-  updatedBy   Users?   @relation("StockUpdatedBy", fields: [updatedById], references: [id])
+  updatedBy   Users?    @relation("StockUpdatedBy", fields: [updatedById], references: [id])
 }
 model UserRoles {
-  id          String   @id @default(uuid())
-  status      Boolean  @default(true)
-  createdAt   DateTime @default(now())
+  user        Users?    @relation(fields: [userId], references: [id])
+  userId      String
+  role        Roles?    @relation(fields: [roleId], references: [id])
+  roleId      String
+  createdAt   DateTime? @default(now())
   updatedAt   DateTime?
   createdById String?
-  createdBy   Users?   @relation("UserRolesCreatedBy", fields: [createdById], references: [id])
+  createdBy   Users?    @relation("UserRolesCreatedBy", fields: [createdById], references: [id])
   updatedById String?
-  updatedBy   Users?   @relation("UserRolesUpdatedBy", fields: [updatedById], references: [id])
+  updatedBy   Users?    @relation("UserRolesUpdatedBy", fields: [updatedById], references: [id])
+
+  @@id([userId, roleId]) // Composite Primary Key
 }
 model Users {
   id                 String         @id @default(uuid())
@@ -144,18 +149,19 @@ model Users {
   stockUpdated       Stock[]        @relation("StockUpdatedBy")
   userRolesCreated   UserRoles[]    @relation("UserRolesCreatedBy")
   userRolesUpdated   UserRoles[]    @relation("UserRolesUpdatedBy")
+  UserRoles          UserRoles[]
 }
 model UserSessions {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   userId     String?
   deviceInfo String?
   ipAddress  String?
   userAgent  String?
-  token      String   @unique
-  createdAt  DateTime @default(now())
-  lastUsedAt DateTime @updatedAt
+  token      String    @unique
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime  @updatedAt
   expiredAt  DateTime?
-  isActive   Boolean  @default(true)
-  status     Boolean  @default(true)
+  isActive   Boolean   @default(true)
+  status     Boolean   @default(true)
   user       Users?    @relation(fields: [userId], references: [id])
 }

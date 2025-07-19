@@ -30,4 +30,5 @@ model Users {
   stockUpdated       Stock[]        @relation("StockUpdatedBy")
   userRolesCreated   UserRoles[]    @relation("UserRolesCreatedBy")
   userRolesUpdated   UserRoles[]    @relation("UserRolesUpdatedBy")
+  UserRoles          UserRoles[]
 }

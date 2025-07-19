@@ -1,15 +1,15 @@
 model Attachments {
-    id          String   @id @default(uuid())
+    id          String    @id @default(uuid())
     name        String?
     path        String?
     type        String?
     status      Int?
-    createdAt   DateTime @default(now())
+    createdAt   DateTime  @default(now())
     updatedAt   DateTime?
     createdById String?
-    createdBy   Users?   @relation("AttachmentsCreatedBy", fields: [createdById], references: [id])
+    createdBy   Users?    @relation("AttachmentsCreatedBy", fields: [createdById], references: [id])
     updatedById String?
-    updatedBy   Users?   @relation("AttachmentsUpdatedBy", fields: [updatedById], references: [id])
+    updatedBy   Users?    @relation("AttachmentsUpdatedBy", fields: [updatedById], references: [id])
 
     books Books[] @relation("BooksAttachment")
 }
