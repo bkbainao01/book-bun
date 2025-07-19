@@ -9,5 +9,5 @@ model Roles {
   createdBy   Users?      @relation("RolesCreatedBy", fields: [createdById], references: [id])
   updatedById String?
   updatedBy   Users?      @relation("RolesUpdatedBy", fields: [updatedById], references: [id])
-  UserRoles   UserRoles[]
+  users   UserRoles[]
 }

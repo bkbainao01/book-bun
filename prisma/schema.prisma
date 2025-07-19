@@ -85,7 +85,7 @@ model Roles {
   createdBy   Users?      @relation("RolesCreatedBy", fields: [createdById], references: [id])
   updatedById String?
   updatedBy   Users?      @relation("RolesUpdatedBy", fields: [updatedById], references: [id])
-  UserRoles   UserRoles[]
+  users   UserRoles[]
 }
 model Stock {
   id          String    @id @default(uuid())
@@ -149,7 +149,7 @@ model Users {
   stockUpdated       Stock[]        @relation("StockUpdatedBy")
   userRolesCreated   UserRoles[]    @relation("UserRolesCreatedBy")
   userRolesUpdated   UserRoles[]    @relation("UserRolesUpdatedBy")
-  UserRoles          UserRoles[]
+  roles              UserRoles[]
 }
 model UserSessions {
   id         String    @id @default(uuid())

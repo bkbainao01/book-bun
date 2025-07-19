@@ -25,6 +25,7 @@ export class UserController {
       lastname: body.lastname,
       email: body.email,
       password: body.password,
+      roleIds: body.roleIds
     };
     return this.userService.create(user);
   };
@@ -35,6 +36,7 @@ export class UserController {
       lastname: body.lastname,
       email: body.email,
       password: body.password,
+      roleIds: body.roleIds
     };
     return this.userService.update((params.id), user);
   };
