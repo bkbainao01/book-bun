@@ -34,34 +34,15 @@ PORT=3000
 
 ---
 
-## 4. สร้าง Prisma Client และ Migration
-
-ถ้าคุณยังไม่มี schema หรืออยากอัพเดต schema ให้ทำตามนี้
+## 4. สร้าง table and run seed
 
 ```powershell
-bun prisma generate
+npm run prisma:merge-schema
 ```
 
-ถ้าเพิ่ม model หรือแก้ schema
 
 ```powershell
 npx prisma migrate dev --name init
-```
-
-หรือถ้าต้องการดัน schema เข้า DB โดยไม่ใช้ migration
-
-```powershell
-bun prisma db push
-```
-
----
-
-## 5. รัน Seed ข้อมูล (ถ้ามี)
-
-ถ้าคุณมีไฟล์ seed ให้รัน
-
-```powershell
-bun prisma db seed
 ```
 
 ---
