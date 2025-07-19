@@ -20,7 +20,7 @@ export class AttachmentController {
 
   async getById({ params }: any) {
     try {
-      const book = this.attachmentService.getById(Number(params.id));
+      const book = this.attachmentService.getById(String(params.id));
       return book ?? { error: "User not found" };
     } catch (error: any) {
       console.error("❌ getById error:", error);
@@ -30,7 +30,7 @@ export class AttachmentController {
 
   async delete({ params }: any) {
     try {
-      return this.attachmentService.delete(Number(params.id));
+      return this.attachmentService.delete(String(params.id));
     } catch (error: any) {
       console.error("❌ deleteBook error:", error);
       return { status: "error", message: error.message };

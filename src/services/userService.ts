@@ -136,7 +136,7 @@ export class UserService {
           lastname: user.lastname,
           roles: {
             deleteMany: {},
-            create: user.roleIds.map((roleId) => ({
+            create: user.roleIds.map((roleId: string) => ({
               role: { connect: { id: roleId } },
             })),
           },
