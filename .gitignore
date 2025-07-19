@@ -42,6 +42,5 @@ package-lock.json
 prisma/book-bun.db
 prisma/dev.book-bun.db-journal
 prisma/generated/
-prisma/schema.prisma
 *.sqlite
 *.db
