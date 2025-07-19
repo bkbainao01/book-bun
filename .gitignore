@@ -39,9 +39,8 @@ package-lock.json
 **/*.bun
 
 # prisma
-prisma/dev.db
-prisma/dev.sqlite
-prisma/dev.db-journal
+prisma/book-bun.db
+prisma/dev.book-bun.db-journal
 prisma/migrations/
 prisma/generated/
 prisma/schema.prisma

@@ -4,6 +4,9 @@ model Books {
   nameEn       String?      @unique
   author       String?
   publisher    String?
+  publishAt    DateTime?
+  pages        Int?
+  isbn         String?
   attachmentId String?
   attachment   Attachments? @relation("BooksAttachment", fields: [attachmentId], references: [id])
   rating       Int?
