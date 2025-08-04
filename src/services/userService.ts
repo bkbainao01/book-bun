@@ -41,7 +41,7 @@ export class UserService {
     }
   };
 
-  getAll = async () => {
+  getAll = async (query:any) => {
     try {
       return prisma.users.findMany({
         include: {

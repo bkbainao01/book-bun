@@ -7,6 +7,7 @@ export const authPlugin = async ({ bearer, jwt, request, set }: any) => {
       "/api/v1/auth/logout",
       "/api-doc/swagger",
       "/",
+      "/health",
     ];
     const currentPath = new URL(request.url).pathname;
 

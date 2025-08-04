@@ -12,6 +12,7 @@ export const swaggerSetting:any = {
           { name: "API", description: "General endpoints" },
           { name: "Users", description: "Users endpoints" },
           { name: "Books", description: "Books endpoints" },
+          { name: "Roles", description: "Roles endpoints" },
         ],
         components: {
           securitySchemes: {
