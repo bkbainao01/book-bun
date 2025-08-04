@@ -18,9 +18,8 @@ const authRoutes = new Elysia(routeDetail);
 // POST /register
 authRoutes.post(
   "/register",
-  async ({ body, set }) => {
-    console.log("🚀 ~ body:", body)
-    return userController.createUser({body})
+  async (ctx:any) => {
+    return userController.createUser(ctx)
   },
   {
     body: t.Object({
@@ -34,7 +33,7 @@ authRoutes.post(
 // POST /login
 authRoutes.post(
   "/login",
-  async ({ jwt, body, set }) => userController.login({jwt, body, set}),
+  async (ctx:any) => userController.login(ctx),
   {
     body: t.Object({
       email: t.String(),
@@ -45,7 +44,7 @@ authRoutes.post(
 // POST /logout
 authRoutes.post(
   "/logout",
-  async ({ body, set}) => userController.logout({body, set}),
+  async (ctx:any) => userController.logout(ctx),
 );
 
 export { authRoutes };

@@ -13,21 +13,21 @@ const routeDetail: any = {
   },
 };
 
-const userRoutes = new Elysia(routeDetail);
-const userController = new UserController();
+const userRoutes:any = new Elysia(routeDetail);
+const userController:any = new UserController();
 
-userRoutes.get("/", async ({ set }) => userController.getAll());
+userRoutes.get("/", async (ctx:any) =>userController.getAll(ctx));
 
 userRoutes.get(
   "/:id",
-  ({ params }: { params: any }) => userController.getById({params}),
-  { params: validate.Object({ id: validate.String() }) }
+  (ctx:any) =>userController.getById(ctx),
+  { params: validate.Object({ id: validate.String() })}
 );
 
 userRoutes.put(
   "/:id",
-  async ({ params, body, set }) =>
-    userController.updateUser({ params, body, set }),
+  async (ctx:any) =>
+    userController.updateUser(ctx),
   {
     body: validate.Object({
       email: validate.String(),
@@ -41,14 +41,14 @@ userRoutes.put(
 
 userRoutes.post(
   "/",
-  async ({ params, body, set }) =>
-    userController.createUser({ params, body, set }),
+  async (ctx:any) =>
+    userController.createUser(ctx),
   {
     body: validate.Object({
       email: validate.String(),
       password: validate.String(),
-      first_name: validate.String(),
-      last_name: validate.String(),
+      firstname: validate.String(),
+      lastname: validate.String(),
       roleIds: validate.Array(validate.String()),
     }),
   }

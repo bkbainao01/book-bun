@@ -4,8 +4,9 @@ import { status } from "elysia";
 export class AttachmentController {
   private attachmentService = new AttachmentService();
 
-  async getAll() {
+  async getAll(ctx: any) {
     try {
+      const { query } = ctx;
       const books = await this.attachmentService.getAll();
       return {
         data: books,
@@ -18,8 +19,9 @@ export class AttachmentController {
     }
   }
 
-  async getById({ params }: any) {
+  async getById(ctx: any) {
     try {
+      const { params } = ctx;
       const book = this.attachmentService.getById(String(params.id));
       return book ?? { error: "User not found" };
     } catch (error: any) {
@@ -28,8 +30,9 @@ export class AttachmentController {
     }
   }
 
-  async delete({ params }: any) {
+  async delete(ctx: any) {
     try {
+      const { params, set } = ctx;
       return this.attachmentService.delete(String(params.id));
     } catch (error: any) {
       console.error("❌ deleteBook error:", error);

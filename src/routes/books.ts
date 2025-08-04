@@ -29,26 +29,26 @@ const bookBodyValidate= t.Object({
 const bookController = new BookController();
 
 // GET /books
-bookRoutes.get("/", async () => bookController.getAll());
+bookRoutes.get("/", async (ctx:any) => bookController.getAll(ctx));
 
 // GET /books/:id
 bookRoutes.get(
     "/:id",
-    ({ params }) => bookController.getById(params),
+    (ctx:any) => bookController.getById(ctx),
     { params: idValidate }
 );
 
 // POST /books
 bookRoutes.post(
     "/",
-    ({ body, set }) => bookController.createBook({body , set}),
+    (ctx) => bookController.createBook(ctx),
     { body: bookBodyValidate }
 );
 
 // PUT /books/:id
 bookRoutes.put(
     "/:id",
-    ({ params, body, set }) => bookController.updateBook({ params, body, set }),
+    (ctx) => bookController.updateBook(ctx),
     { params: idValidate, body: bookBodyValidate }
 );
 

@@ -5,7 +5,7 @@ import { status } from "elysia";
 export class BookController {
   private bookService = new BookService();
 
-  async getAll () {
+  async getAll (ctx: any) {
     try {
         const books = await this.bookService.getAll();
         return {
@@ -19,9 +19,10 @@ export class BookController {
     };
   }
 
-  async getById ({ params }: any) {
+  async getById (ctx: any) {
     try {
-        const book = this.bookService.getById(Number(params.id));
+        const { params } = ctx;
+        const book = this.bookService.getById(params.id);
         return book ?? { error: "User not found" };
     } catch (error:any) {
         console.error("❌ getById error:", error);
@@ -29,8 +30,9 @@ export class BookController {
     }
   };
 
-  async createBook ({ body }: any) {
+  async createBook (ctx: any) {
     try {
+        const { body } = ctx;
         const book = {
             nameTh: body.nameTh,
             nameEn: body.nameEn,
@@ -50,23 +52,25 @@ export class BookController {
     }
   };
 
-  async updateBook({ params, body }: any) {
+  async updateBook(ctx: any) {
     try {
+        const { params, body } = ctx;
         const book = {
             name: body.name,
             author: body.author,
             price: body.price
         }
-        return this.bookService.update(Number(params.id), book);
+        return this.bookService.update(params.id, book);
     } catch (error:any) {
         console.error("❌ updateBook error:", error);
         return { status: "error" , message: error.message };
     }
   }
 
-  async delete({ params }: any){
+  async delete(ctx: any){
     try {
-        return this.bookService.delete(Number(params.id));
+        const { params } = ctx;
+        return this.bookService.delete(params.id);
     } catch (error:any) {
         console.error("❌ deleteBook error:", error);
         return { status: "error" , message: error.message };

@@ -1,17 +1,13 @@
 ## Prisma Setting
-สร้างไฟล์ตั้งต้น สร้างโฟลเดอร์ prisma/ พร้อม schema.prisma และ .env
+merge file models เป็น schema.prisma
  ```sh
-bunx prisma init
+npm run prisma:merge-schema
 ```
-สร้าง Prisma Client ตาม schema
+สร้าง Prisma Client ตาม schema.prisma
  ```sh
-bunx prisma generate
+npx prisma migrate dev --name init
 ```
-สร้าง Prisma Client ตาม schema
- ```sh
-bunx prisma migrate dev --name init
-```
-สร้าง Prisma Client ตาม schema
+สร้าง Prisma Client ตาม schema.prisma
 ```sh
 npx prisma studio
 ```

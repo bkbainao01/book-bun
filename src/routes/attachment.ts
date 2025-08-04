@@ -17,12 +17,12 @@ const idValidate = t.Object({ id: t.Number() });
 const attachmentController = new AttachmentController();
 
 // GET /books
-attachmentRoutes.get("/", async () => attachmentController.getAll());
+attachmentRoutes.get("/", async (ctx:any) => attachmentController.getAll(ctx));
 
 // GET /books/:id
 attachmentRoutes.get(
   "/:id",
-  ({ params }) => attachmentController.getById(params),
+  (ctx:any) => attachmentController.getById(ctx),
   {
     params: idValidate,
   }
@@ -31,7 +31,7 @@ attachmentRoutes.get(
 // DELETE /books/:id
 attachmentRoutes.delete(
   "/:id",
-  ({ params, set }) => attachmentController.delete({ params, set }),
+  (ctx:any) => attachmentController.delete(ctx),
   { params: idValidate }
 );
 
