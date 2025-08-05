@@ -41,21 +41,21 @@ bookRoutes.get(
 // POST /books
 bookRoutes.post(
     "/",
-    (ctx) => bookController.createBook(ctx),
+    (ctx:any) => bookController.createBook(ctx),
     { body: bookBodyValidate }
 );
 
 // PUT /books/:id
 bookRoutes.put(
     "/:id",
-    (ctx) => bookController.updateBook(ctx),
+    (ctx:any) => bookController.updateBook(ctx),
     { params: idValidate, body: bookBodyValidate }
 );
 
 // DELETE /books/:id
 bookRoutes.delete(
     "/:id",
-    ({ params, set }) => bookController.delete({ params, set }),
+    (ctx:any) => bookController.delete(ctx),
     { params: idValidate }
 );
 

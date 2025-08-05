@@ -1,12 +1,8 @@
 import { prisma } from "@/config/db";
 import Bun, { password } from "bun";
+import logger from "@/utils/logger";
 
 export class BookService {
-  // private db: Database;
-
-  // constructor() {
-  //   this.db = new Database("mydb.sqlite");
-  // }
 
   getAll() {
     try {
@@ -18,8 +14,8 @@ export class BookService {
         },
       });
     } catch (error) {
-      console.error("❌ getBooks error:", error);
-      return [];
+      logger.error("❌ getBooks error:", error);
+      throw error;
     }
   }
 
@@ -27,51 +23,48 @@ export class BookService {
     try {
       return prisma.books.findUnique({ where: { id } });
     } catch (error) {
-      console.error("❌ getBook error:", error);
+      logger.error("❌ getBook error:", error);
       return {};
     }
   }
 
-  create(book: any) {
+  create(body: any) {
     try {
       return prisma.books.create({
         data: {
-          nameTh: book.nameTh,
-          nameEn: book.nameEn,
-          author: book.author,
-          publisher: book.publisher,
-          rating: book.rating,
-          price: book.price,
-          discount: book.discount,
-          description: book.description,
-          summary: book.summary,
+          nameTh: body.nameTh,
+          nameEn: body.nameEn,
+          author: body.author,
+          publisher: body.publisher,
+          rating: body.rating,
+          price: body.price,
+          discount: body.discount,
+          description: body.description,
+          summary: body.summary,
 
-          attachment: book.attachment,
+          attachment: body.attachment,
 
         },
       });
     } catch (error) {
-      console.error("❌ createBook error:", error);
-      return {
-        status: "error",
-        error,
-      };
+      logger.error("❌ createBook error:", error);
+      throw error
     }
   }
 
-  update(id: string, book: any) {
+  update(id: string, body: any) {
     try {
       return prisma.books.update({
         where: { id },
         data: {
-          name: book.name,
-          author: book.author,
-          price: book.price,
+          name: body.name,
+          author: body.author,
+          price: body.price,
         },
       });
     } catch (error) {
-      console.error("❌ updateBook error:", error);
-      return null;
+      logger.error("❌ updateBook error:", error);
+      throw error;
     }
   }
 
@@ -81,8 +74,8 @@ export class BookService {
         where: { id },
       });
     } catch (error) {
-      console.error("❌ deleteBook error:", error);
-      return { status: "error", error };
+      logger.error("❌ deleteBook error:", error);
+      throw error;
     }
   }
 }

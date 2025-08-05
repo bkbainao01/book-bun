@@ -10,95 +10,51 @@ export class UserController {
 
   async getAll(ctx: any) {
     try {
-      const { query } = ctx;
-      const resp:any = await this.userService.getAll(query);
-      return {
-        data: resp,
-        error: null,
-        meta: {
-          requestId: "uuid", // คุณสามารถใช้ UUID จริงได้ที่นี่
-          tookMs: 1, // เวลาที่ใช้ในการประมวลผลคำขอ
-          pagination:{
-            total: resp.length, // จำนวนทั้งหมดของผู้ใช้
-            page: 1, // หน้าแรก
-            limit: 10, // จำนวนสูงสุดต่อหน้า
-            totalPages: Math.ceil(resp.length / 10), // คำนวณจำนวนหน้าทั้งหมด
-          }
-        },
-        message: "Users retrieved successfully",
-      }
+      const { reply } = ctx;
+      const resp = await this.userService.getAll(ctx);
+      return reply.ok(resp)
     } catch (error) {
       throw error
     }
   }
 
-  getById = (ctx: any) => {
+  async getById (ctx: any) {
     try {
-      const { params } = ctx;
-      const resp = this.userService.getById((params.id));
-      return {
-        data: resp,
-        error: null,
-        meta: {
-          requestId: "uuid", // คุณสามารถใช้ UUID จริงได้ที่นี่
-          tookMs: 1, // เวลาที่ใช้ในการประมวลผลคำขอ
-        },
-      }
+      const { params, reply } = ctx;
+      const resp = await this.userService.getById((params.id));
+      return reply.ok(resp)
     } catch (error: any) {
       throw error
     }
   };
 
-  createUser = (ctx: any) => {
-    const { body } = ctx;
-    const user = {
-      firstname: body.firstname,
-      lastname: body.lastname,
-      email: body.email,
-      password: body.password,
-      roleIds: body.roleIds
-    };
-    return this.userService.create(user);
+  async createUser (ctx: any) {
+    try {
+      const { body, reply } = ctx;
+      const resp = await this.userService.create(body);
+      return reply.ok(resp)
+    } catch (error) {
+      throw error;
+    }
   };
 
-  updateUser = ({ params, body }: any) => {
+  async updateUser (ctx: any) {
     try {
-      const user = {
-        firstname: body.firstname,
-        lastname: body.lastname,
-        email: body.email,
-        password: body.password,
-        roleIds: body.roleIds
-      };
-      const resp = this.userService.getById((params.id));
-      return {
-        data: resp,
-        error: null,
-        meta: {
-          requestId: "uuid", // คุณสามารถใช้ UUID จริงได้ที่นี่
-          tookMs: 1, // เวลาที่ใช้ในการประมวลผลคำขอ
-        },
-      }
+      const { params, body, reply } = ctx;
+      const resp = await this.userService.update({ id:params.id, body});
+      return reply.ok(resp)
     } catch (error: any) {
       throw error;
     }
   };
 
   deleteUser = ({ params }: any) => {
-    const resp = this.userService.getById((params.id));
-    return {
-        data: resp,
-        error: null,
-        meta: {
-          requestId: "uuid", // คุณสามารถใช้ UUID จริงได้ที่นี่
-          tookMs: 1, // เวลาที่ใช้ในการประมวลผลคำขอ
-        },
-      }
+    return this.userService.getById((params.id));
   };
 
   login = async (ctx: any) => {
     try {
-      const { jwt, body, set, request } = ctx;
+      const { jwt, body, set, request,reply } = ctx;
       const ipAddress =
       request.headers.get('x-forwarded-for') ||
       request.headers.get('x-real-ip') ||
@@ -166,41 +122,34 @@ export class UserController {
           userAgent,
           token: resp.token,
         });
-        return {
-          data: resp,
-          error: null,
-          meta: {
-            requestId: "uuid", // คุณสามารถใช้ UUID จริงได้ที่นี่
-            tookMs: 1, // เวลาที่ใช้ในการประมวลผลคำขอ
-          },
-        }
+        return reply.ok(resp)
       } else {
-        throw new Error("Invalid email or password");
+        return reply.fail(400, {
+          code: 'BAD REQUEST',
+          message: 'Invalid Email Or Password'
+        });
       }
     } catch (error: any) {
       throw error;
     }
   };
 
-  logout = async ({ jwt, body, set }: any) => {
+  logout = async (ctx: any) => {
     try {
+      const { jwt, body, set, reply } = ctx;
       const session = await this.userSessionService.findByToken(body.token);
       if (!session || !session.isActive) {
-        throw  { message: "Session not found or already logged out"};
+        return reply.fail(404, {
+          code: 'NOT_FOUND',
+          message: 'Session Not Found Or Already Logged Out'
+        });
       }
 
       const resp = await this.userSessionService.update(session.id, {
         isActive: false,
       });
 
-      return {
-        data: resp,
-        error: null,
-        meta: {
-          requestId: "uuid", // คุณสามารถใช้ UUID จริงได้ที่นี่
-          tookMs: 1, // เวลาที่ใช้ในการประมวลผลคำขอ
-        },
-      }
+      return reply.ok(resp);
     } catch (error: any) {
       throw error;
     }

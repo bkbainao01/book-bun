@@ -9,6 +9,7 @@ import { envelopePlugin } from './plugins/envelope';
 import { PrismaClient } from '@prisma/client'
 import { UserSessionService } from './services/userSessionService'; // service จริงของคุณ
 import cors from '@elysiajs/cors'
+import logger from "@/utils/logger";
 
 const prisma = new PrismaClient()
 const sessionService = new UserSessionService();
@@ -35,7 +36,8 @@ app
   .get("/", () => "Welcome to Book-Bun-API", { detail: { tags: ["Default"] } })
   .get('/health', () => ({ ok: true }), { detail: { tags: ["Default"] } })
   .use(swagger(swaggerSetting),)
-  .listen(appPort);
+  .listen(appPort ,()=>{
+    logger.info(`🚀 running at http://localhost:${appPort}`);
+  });
 
-  console.log(`running at http://localhost:${appPort}`)
 

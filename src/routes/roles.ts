@@ -18,10 +18,7 @@ const idValidate = t.Object({ id: t.Number() });
 const roleController = new RoleController();
 
 // GET /books
-roleRoutes.get("/", async (ctx:any) =>{
-    console.log("role >> ")
-    return roleController.getAll(ctx)
-});
+roleRoutes.get("/", async (ctx:any) =>roleController.getAll(ctx));
 
 // GET /books/:id
 roleRoutes.get(
