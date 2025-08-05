@@ -1,14 +1,16 @@
 import { prisma } from "@/config/db";
 import Bun, { password } from "bun";
+import logger from "@/utils/logger";
 
 export class RoleService {
 
-  getAll() {
+  getAll(ctx:any) {
     try {
+      const { params } = ctx;
       return prisma.roles.findMany();
     } catch (error) {
-      console.error("❌ getBooks error:", error);
-      return [];
+      logger.error("❌ getBooks error:", error);
+      throw error;
     }
   }
 
@@ -16,8 +18,8 @@ export class RoleService {
     try {
       return prisma.roles.findUnique({ where: { id } });
     } catch (error) {
-      console.error("❌ getBook error:", error);
-      return {};
+      logger.error("❌ getBook error:", error);
+      throw error;
     }
   }
 }

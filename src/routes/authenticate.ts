@@ -18,9 +18,7 @@ const authRoutes = new Elysia(routeDetail);
 // POST /register
 authRoutes.post(
   "/register",
-  async (ctx:any) => {
-    return userController.createUser(ctx)
-  },
+  async (ctx:any) => userController.createUser(ctx),
   {
     body: t.Object({
       email: t.String(),

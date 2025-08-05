@@ -1,13 +1,14 @@
 import { prisma } from "@/config/db";
 import Bun, { password } from "bun";
+import logger from "@/utils/logger";
 
 export class AttachmentService {
   getAll() {
     try {
       return prisma.attachments.findMany();
     } catch (error) {
-      console.error("❌ getattachments error:", error);
-      return [];
+      logger.error("❌ getattachments error:", error);
+      throw error;
     }
   }
 
@@ -15,8 +16,8 @@ export class AttachmentService {
     try {
       return prisma.attachments.findUnique({ where: { id } });
     } catch (error) {
-      console.error("❌ getBook error:", error);
-      return {};
+      logger.error("❌ getBook error:", error);
+      throw error;
     }
   }
 
@@ -26,8 +27,8 @@ export class AttachmentService {
         where: { id },
       });
     } catch (error) {
-      console.error("❌ deleteBook error:", error);
-      return { status: "error", error };
+      logger.error("❌ deleteBook error:", error);
+      throw error;
     }
   }
 }

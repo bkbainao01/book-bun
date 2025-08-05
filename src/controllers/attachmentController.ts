@@ -1,41 +1,47 @@
 import { AttachmentService } from "@/services/attachmentService";
 import { status } from "elysia";
+import logger from "@/utils/logger";
+
 
 export class AttachmentController {
   private attachmentService = new AttachmentService();
 
   async getAll(ctx: any) {
     try {
-      const { query } = ctx;
-      const books = await this.attachmentService.getAll();
-      return {
-        data: books,
-        status: "ok",
-        message: "Get all books success",
-      };
+      const { query, reply } = ctx;
+      const resp = await this.attachmentService.getAll();
+      return reply.ok(resp);
     } catch (error: any) {
-      console.error("❌ getAll error:", error);
-      return { status: "error", message: error.message };
+      logger.error("❌ getAll error:", error);
+      throw error;
     }
   }
 
   async getById(ctx: any) {
     try {
-      const { params } = ctx;
-      const book = this.attachmentService.getById(String(params.id));
-      return book ?? { error: "User not found" };
+      const { params,reply } = ctx;
+      const resp = await this.attachmentService.getById(String(params.id));
+      if (resp) {
+        return reply.ok(resp);
+      } else {
+        return reply.fail(404, {
+          code: 'NOT_FOUND',
+          message: 'Attachment not found'
+        });
+      }
     } catch (error: any) {
-      console.error("❌ getById error:", error);
+      logger.error("❌ getById error:", error);
       return { status: "error", message: error.message };
     }
   }
 
   async delete(ctx: any) {
     try {
-      const { params, set } = ctx;
-      return this.attachmentService.delete(String(params.id));
+      const { params, set, reply } = ctx;
+      const resp = await this.attachmentService.delete(String(params.id));
+      return reply.ok(resp);
     } catch (error: any) {
-      console.error("❌ deleteBook error:", error);
+      logger.error("❌ delete Attachment error:", error);
       return { status: "error", message: error.message };
     }
   }

@@ -1,6 +1,9 @@
 import { prisma } from "@/config/db";
 import bcrypt from "bcrypt";
 import Bun from "bun";
+import logger from "@/utils/logger";
+
+
 export class UserService {
   authenticate = async (
     user: { email: string; password: string },
@@ -33,16 +36,14 @@ export class UserService {
         isLoggedIn: true,
       };
     } catch (error) {
-      console.error("❌ Login fail:", error);
-      return {
-        loggedIn: false,
-        error,
-      };
+      logger.error("❌ Login fail:", error);
+      throw error;
     }
   };
 
-  getAll = async (query:any) => {
+  getAll = async (ctx:any) => {
     try {
+      const { query } = ctx;
       return prisma.users.findMany({
         include: {
           roles: {
@@ -53,14 +54,14 @@ export class UserService {
         },
       });
     } catch (error) {
-      console.error("❌ getUsers error:", error);
-      return { status: "error" };
+      logger.error("❌ getUsers error:", error);
+      throw error;
     }
   };
 
-  getById(id: string) {
+  async getById(id: string) {
     try {
-      return prisma.users.findUnique({
+       const resp:any = await prisma.users.findUnique({
         where: {
           id: id,
         },
@@ -72,9 +73,14 @@ export class UserService {
           },
         },
       });
+       if(resp?.roles){
+        const roles = resp.roles.map((r:any)=>r.role)
+        resp.roles = roles
+       }
+      return resp
     } catch (error) {
-      console.error("❌ getUser error:", error);
-      return { status: "error" };
+      logger.error("❌ getUser error:", error);
+      throw error;
     }
   }
 
@@ -86,72 +92,55 @@ export class UserService {
         },
       });
     } catch (error: any) {
-      console.error("❌ getUserByEmail error:");
-      return {
-        data: {
-          isLoggedIn: false,
-        },
-        status: "error",
-        error: error.message,
-      };
+      logger.error("❌ getUserByEmail error:");
+      throw error;
     }
   }
 
-  create = async (user: {
-    email: string;
-    password: string;
-    firstname: string;
-    lastname: string;
-    roleIds: string[];
-  }) => {
+  create = async (body:any) => {
     try {
-      const hashedPassword = await Bun.password.hash(user.password, {
+      const hashedPassword = await Bun.password.hash(body.password, {
         algorithm: "bcrypt",
         cost: 4,
       });
       return prisma.users.create({
         data: {
-          email: user.email,
+          email: body.email,
           password: hashedPassword,
-          firstname: user.firstname,
-          lastname: user.lastname,
+          firstname: body.firstname,
+          lastname: body.lastname,
           roles: {
-            create: user.roleIds.map((roleId) => ({
+            create: body.roleIds.map((roleId:string) => ({
               role: { connect: { id: roleId } },
             })),
           },
         },
       });
     } catch (error) {
-      console.error("❌ createUser error:", error);
-      return { status: "error", error };
+      logger.error("❌ createUser error:", error);
+      throw error;
     }
   };
 
-  update = async (id: string, user: any) => {
+  update = async ({ id, body }:any) => {
     try {
-      const hashedPassword = await Bun.password.hash(user.password, {
-        algorithm: "bcrypt",
-        cost: 4,
-      });
       return prisma.users.update({
         where: { id: id },
         data: {
-          email: user.email,
-          password: hashedPassword,
-          firstname: user.firstname,
-          lastname: user.lastname,
+          email: body.email,
+          firstname: body.firstname,
+          lastname: body.lastname,
           roles: {
             deleteMany: {},
-            create: user.roleIds.map((roleId: string) => ({
+            create: body.roleIds.map((roleId: string) => ({
               role: { connect: { id: roleId } },
             })),
           },
         },
       });
     } catch (error) {
-      console.error("❌ updateUser error:", error);
-      return { status: "error", error };
+      logger.error("❌ updateUser error:", error);
+      throw error;
     }
   };
 
@@ -161,8 +150,8 @@ export class UserService {
         where: { id },
       });
     } catch (error) {
-      console.error("❌ deleteUser error:", error);
-      return { status: "error", error };
+      logger.error("❌ deleteUser error:", error);
+      throw error;
     }
   }
 }

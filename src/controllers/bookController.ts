@@ -1,5 +1,7 @@
 import { BookService } from "@/services/bookService";
 import { status } from "elysia";
+import logger from "@/utils/logger";
+
 
 
 export class BookController {
@@ -7,73 +9,63 @@ export class BookController {
 
   async getAll (ctx: any) {
     try {
-        const books = await this.bookService.getAll();
-        return {
-            data: books,
-            status: "ok",
-            message:'Get all books success',
-        };
+        const { reply } = ctx;
+        const resp = await this.bookService.getAll();
+        return reply.ok(resp);
     } catch (error:any) {
-        console.error("❌ getAll error:", error);
-        return { status: "error" , message: error.message};
+        logger.error("❌ getAll error:", error);
+        throw error;
     };
   }
 
   async getById (ctx: any) {
     try {
-        const { params } = ctx;
-        const book = this.bookService.getById(params.id);
-        return book ?? { error: "User not found" };
+        const { params, reply } = ctx;
+        const resp = await this.bookService.getById(params.id);
+        if(resp) {
+            reply.ok(resp);
+        } else {
+            reply.fail(404,{
+                code: 'NOT_FOUND',
+                message: 'Book not found'
+            })
+        }
     } catch (error:any) {
-        console.error("❌ getById error:", error);
-        return { status: "error" , message: error.message};
+        logger.error("❌ getById error:", error);
+        throw error;
     }
   };
 
   async createBook (ctx: any) {
     try {
-        const { body } = ctx;
-        const book = {
-            nameTh: body.nameTh,
-            nameEn: body.nameEn,
-            author: body.author,
-            publisher: body.publisher,
-            attachment: body.attachment,
-            rating: body.rating,
-            price: body.price,
-            discount: body.discount,
-            description: body.description,
-            summary: body.summary
-        };
-        return this.bookService.create(book);
+        const { body, reply } = ctx;
+        const resp = await this.bookService.create(body);
+        return reply.ok(resp);
     } catch (error:any) {
-        console.error("❌ createBook error:", error);
-        return { status: "error" , message: error.message };
+        logger.error("❌ createBook error:", error);
+        throw error;
     }
   };
 
   async updateBook(ctx: any) {
     try {
-        const { params, body } = ctx;
-        const book = {
-            name: body.name,
-            author: body.author,
-            price: body.price
-        }
-        return this.bookService.update(params.id, book);
+        const { params, body, reply } = ctx;
+        const resp = await this.bookService.update(params.id, body);
+        return reply.ok(resp);
     } catch (error:any) {
-        console.error("❌ updateBook error:", error);
-        return { status: "error" , message: error.message };
+        logger.error("❌ updateBook error:", error);
+        throw error;
     }
   }
 
   async delete(ctx: any){
     try {
-        const { params } = ctx;
-        return this.bookService.delete(params.id);
+        const { params, reply } = ctx;
+        const resp = await this.bookService.delete(params.id);
+        return reply.ok(resp);
     } catch (error:any) {
-        console.error("❌ deleteBook error:", error);
-        return { status: "error" , message: error.message };
+        logger.error("❌ deleteBook error:", error);
+        throw error;
     }
   }
 }

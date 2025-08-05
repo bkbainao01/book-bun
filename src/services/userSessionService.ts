@@ -1,12 +1,13 @@
 import { prisma } from "@/config/db";
 import moment from "moment";
+import logger from "@/utils/logger";
 
 export class UserSessionService {
 //   getAll = async () => {
 //     try {
 //       return prisma.userSessions.findMany();
 //     } catch (error) {
-//       console.error("❌ getUserSessions error:", error);
+//       logger.error("❌ getUserSessions error:", error);
 //       return { status: "error" };
 //     }
 //   };
@@ -23,7 +24,7 @@ export class UserSessionService {
         }
       });
     } catch (error) {
-      console.error("❌ getUserSessions error:", error);
+      logger.error("❌ getUserSessions error:", error);
       return { status: "error" };
     }
   };
@@ -35,7 +36,7 @@ export class UserSessionService {
   //       },
   //     });
   //   } catch (error) {
-  //     console.error("❌ getUserSession error:", error);
+  //     logger.error("❌ getUserSession error:", error);
   //     return { status: "error" };
   //   }
   // }
@@ -61,8 +62,8 @@ export class UserSessionService {
             }
           });
     } catch (error) {
-      console.error("❌ createUser error:", error);
-      return { status: "error", error };
+      logger.error("❌ createUser error:", error);
+      throw error;
     }
   };
 
@@ -73,19 +74,19 @@ export class UserSessionService {
          data: data
       });
     } catch (error) {
-      console.error("❌ updateUser error:", error);
-      return { status: "error", error };
+      logger.error("❌ updateUser error:", error);
+      throw error;
     }
   }
 
-  delete(id: number) {
+  delete(id: string) {
     try {
       return prisma.userSessions.delete({
         where: { id },
       });
     } catch (error) {
-      console.error("❌ deleteUser error:", error);
-      return { status: "error", error };
+      logger.error("❌ deleteUser error:", error);
+      throw error;
     }
   }
 
@@ -96,8 +97,8 @@ export class UserSessionService {
         data: { isActive: false },
       });
     } catch (error) {
-      console.error("❌ deleteUser error:", error);
-      return { status: "error", error };
+      logger.error("❌ deleteUser error:", error);
+      throw error;
     }
   }
 }

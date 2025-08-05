@@ -16,7 +16,7 @@ const routeDetail: any = {
 const userRoutes:any = new Elysia(routeDetail);
 const userController:any = new UserController();
 
-userRoutes.get("/", async (ctx:any) =>userController.getAll(ctx));
+userRoutes.get("/", async (ctx:any) => userController.getAll(ctx) );
 
 userRoutes.get(
   "/:id",
@@ -26,14 +26,12 @@ userRoutes.get(
 
 userRoutes.put(
   "/:id",
-  async (ctx:any) =>
-    userController.updateUser(ctx),
+  async (ctx:any) => userController.updateUser(ctx),
   {
     body: validate.Object({
       email: validate.String(),
-      password: validate.String(),
-      first_name: validate.String(),
-      last_name: validate.String(),
+      firstname: validate.String(),
+      lastname: validate.String(),
       roleIds: validate.Array(validate.String()),
     }),
   }
@@ -41,8 +39,7 @@ userRoutes.put(
 
 userRoutes.post(
   "/",
-  async (ctx:any) =>
-    userController.createUser(ctx),
+  async (ctx:any) => userController.createUser(ctx),
   {
     body: validate.Object({
       email: validate.String(),
