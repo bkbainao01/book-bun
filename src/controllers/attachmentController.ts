@@ -41,7 +41,7 @@ export class AttachmentController {
       const resp = await this.attachmentService.delete(String(params.id));
       return reply.ok(resp);
     } catch (error: any) {
-      logger.error("❌ deleteAttachment error:", error);
+      logger.error("❌ delete Attachment error:", error);
       return { status: "error", message: error.message };
     }
   }
