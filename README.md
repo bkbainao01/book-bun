@@ -26,7 +26,7 @@ bun install
 สร้างไฟล์ `.env` ใน root project เพื่อเก็บตัวแปร environment สำคัญ
 
 ```env
-DATABASE_URL="mysql://username:password@localhost:3306/databasename"
+DATABASE_URL="mysql://username:password@localhost:3306/DatabaseName"
 PORT=3000
 ```
 
