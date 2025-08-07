@@ -1,10 +1,10 @@
+import logger from '@/utils/logger';
 import type { Elysia } from 'elysia';
 
 type Meta = Record<string, unknown>;
 type AppError = { code: string; message: string; details?: unknown };
 
-const envelope = (data: unknown, meta: Meta = {}, error: AppError | null = null) =>
-  ({ data, error, meta });
+const envelope = (data: unknown, meta: Meta = {}, error: AppError | null = null) => ({ data, error, meta });
 
 export const envelopePlugin = (app: Elysia) =>
   app
@@ -49,20 +49,21 @@ export const envelopePlugin = (app: Elysia) =>
       // map สถานะ
       const statusList:any = [
         { code:400, name:'BAD REQUEST' },
-        { code:404, name:'NOT FOUND' },
-        { code:422, name:'VALIDATION' },
-        { code:400, name:'PARSE' },
         { code:401, name:'UNAUTHORIZED' },
         { code:403, name:'FORBIDDEN' },
-        { code:500, name:'INTERNAL_SERVER_ERROR' },
+        { code:404, name:'NOT FOUND' },
+        { code:422, name:'VALIDATION' },
+        { code:500, name:'INTERNAL SERVER ERROR' },
       ]
-
+      let status = statusList.find((item: any) => item.code === (set.code || code));
+      status = status?.name ?? 'UNKNOWN ERROR';
+      console.log('')
       const errBody: AppError = {
-        code: statusList.includes(set.code || code).name,
+        code: status,
         message: error?.message ?? 'Internal Server Error',
-        details: (error as any)?.cause?.details
+        details: error?.details ?? 'Internal Server Error'
       };
 
       const meta = { requestId, tookMs };
-      return new Response(JSON.stringify(envelope(null, meta, errBody)), { status: set.code });
+      return new Response(JSON.stringify(envelope(null, meta, errBody)), { status: set.code || code });
     });

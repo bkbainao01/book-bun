@@ -1,6 +1,6 @@
 import { verifyToken,validateSession } from './auth';
 
-export const authPlugin = async ({ bearer, jwt, request, set }: any) => {
+export const authPlugin = async ({ bearer, jwt, request, set, reply }: any) => {
     const publicPaths = [
       "/api/v1/auth/login",
       "/api/v1/auth/register",
@@ -17,8 +17,8 @@ export const authPlugin = async ({ bearer, jwt, request, set }: any) => {
       return {};
     }
 
-    const user = await verifyToken({ bearer, jwt, set });
-    const session = await validateSession({ bearer, set });
+    const user = await verifyToken({ bearer, jwt, set,reply });
+    const session = await validateSession({ bearer, set, reply });
 
     return {
       authUser: user,

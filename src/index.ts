@@ -31,7 +31,7 @@ app
   )
   .use(bearer())
   .decorate('userSessionService', sessionService) // inject service
-  .derive(async ({ bearer, jwt, request, set }) => authPlugin({ bearer, jwt, request, set }))
+  .derive(async ({ bearer, jwt, request, set, reply }) => authPlugin({ bearer, jwt, request, set, reply }))
   .use(apiV1)
   .get("/", () => "Welcome to Book-Bun-API", { detail: { tags: ["Default"] } })
   .get('/health', () => ({ ok: true }), { detail: { tags: ["Default"] } })
